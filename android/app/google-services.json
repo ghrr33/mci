@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "218866226896",
+    "project_id": "missione-cattolica-ital-1v423l",
+    "storage_bucket": "missione-cattolica-ital-1v423l.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218866226896:android:7b613cd2447169a0bff0d5",
+        "android_client_info": {
+          "package_name": "com.mycompany.missionecattolicaitaliana"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3zOCrYdexYJMcq0xUqgQR-PZlGQRAlbM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
