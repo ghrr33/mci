@@ -1,3 +1,4 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -5,9 +6,11 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 
+import 'backend/push_notifications/push_notifications_util.dart';
 import 'backend/firebase/firebase_config.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
+import 'flutter_flow/internationalization.dart';
 import 'index.dart';
 
 void main() async {
@@ -19,7 +22,13 @@ void main() async {
 
   await FlutterFlowTheme.initialize();
 
-  runApp(const MyApp());
+  final appState = FFAppState(); // Initialize FFAppState
+  await appState.initializePersistedState();
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => appState,
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -34,6 +43,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+
   ThemeMode _themeMode = FlutterFlowTheme.themeMode;
 
   late AppStateNotifier _appStateNotifier;
@@ -42,6 +53,7 @@ class _MyAppState extends State<MyApp> {
   late Stream<BaseAuthUser> userStream;
 
   final authUserSub = authenticatedUserStream.listen((_) {});
+  final fcmTokenSub = fcmTokenUserStream.listen((_) {});
 
   @override
   void initState() {
@@ -63,8 +75,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     authUserSub.cancel();
-
+    fcmTokenSub.cancel();
     super.dispose();
+  }
+
+  void setLocale(String language) {
+    safeSetState(() => _locale = createLocale(language));
   }
 
   void setThemeMode(ThemeMode mode) => safeSetState(() {
@@ -75,13 +91,26 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Missione Cattolica Italiana',
+      title: 'MCI',
       localizationsDelegates: const [
+        FFLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
+        FallbackMaterialLocalizationDelegate(),
+        FallbackCupertinoLocalizationDelegate(),
       ],
-      supportedLocales: const [Locale('en', '')],
+      locale: _locale,
+      supportedLocales: const [
+        Locale('it'),
+        Locale('de'),
+        Locale('es'),
+        Locale('fr'),
+        Locale('hr'),
+        Locale('hi'),
+        Locale('en'),
+        Locale('pl'),
+      ],
       theme: ThemeData(
         brightness: Brightness.light,
         useMaterial3: false,
@@ -108,7 +137,7 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPageName = 'homePage';
+  String _currentPageName = 'Home';
   late Widget? _currentPage;
 
   @override
@@ -121,59 +150,103 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'profile': const ProfileWidget(),
-      'homePage': const HomePageWidget(),
-      'Events': const EventsWidget(),
-      'SanteMesse': const SanteMesseWidget(),
+      'ProfileUser': const ProfileUserWidget(),
+      'Home': const HomeWidget(),
+      'EventsCerca': const EventsCercaWidget(),
+      'chat_2_main': const Chat2MainWidget(),
+      'Appuntamenti': const AppuntamentiWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
     return Scaffold(
       body: _currentPage ?? tabs[_currentPageName],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (i) => safeSetState(() {
-          _currentPage = null;
-          _currentPageName = tabs.keys.toList()[i];
-        }),
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        selectedItemColor: FlutterFlowTheme.of(context).primary,
-        unselectedItemColor: FlutterFlowTheme.of(context).secondaryText,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.manage_accounts,
-              size: 24.0,
+      bottomNavigationBar: Visibility(
+        visible: responsiveVisibility(
+          context: context,
+          desktop: false,
+        ),
+        child: BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: (i) => safeSetState(() {
+            _currentPage = null;
+            _currentPageName = tabs.keys.toList()[i];
+          }),
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          selectedItemColor: FlutterFlowTheme.of(context).secondaryText,
+          unselectedItemColor: FlutterFlowTheme.of(context).secondaryText,
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.manage_accounts,
+                size: 24.0,
+              ),
+              activeIcon: const Icon(
+                Icons.manage_accounts,
+                size: 40.0,
+              ),
+              label: FFLocalizations.of(context).getText(
+                'koznlfwh' /* Impostazioni */,
+              ),
+              tooltip: '',
             ),
-            label: 'Home',
-            tooltip: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_rounded,
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.home_rounded,
+              ),
+              activeIcon: const Icon(
+                Icons.home_rounded,
+                size: 40.0,
+              ),
+              label: FFLocalizations.of(context).getText(
+                'uvi5vae5' /* Home */,
+              ),
+              tooltip: '',
             ),
-            label: '',
-            tooltip: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.event,
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.event,
+              ),
+              activeIcon: const Icon(
+                Icons.event,
+                size: 40.0,
+              ),
+              label: FFLocalizations.of(context).getText(
+                'tg9tud5z' /* Eventi */,
+              ),
+              tooltip: '',
             ),
-            label: 'Eventi',
-            tooltip: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.church_sharp,
-              size: 24.0,
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.forum_outlined,
+                size: 24.0,
+              ),
+              activeIcon: const Icon(
+                Icons.forum_outlined,
+                size: 40.0,
+              ),
+              label: FFLocalizations.of(context).getText(
+                'cm9rxsp8' /* Chat */,
+              ),
+              tooltip: '',
             ),
-            label: 'Home',
-            tooltip: '',
-          )
-        ],
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.date_range_outlined,
+              ),
+              activeIcon: const Icon(
+                Icons.date_range_rounded,
+                size: 40.0,
+              ),
+              label: FFLocalizations.of(context).getText(
+                'xiaik3p4' /* Appuntamenti */,
+              ),
+              tooltip: '',
+            )
+          ],
+        ),
       ),
     );
   }

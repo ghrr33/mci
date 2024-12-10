@@ -125,22 +125,22 @@ class LightModeTheme extends FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
-  late Color primary = const Color(0xFFF83B46);
-  late Color secondary = const Color(0xFFFF6A73);
-  late Color tertiary = const Color(0xFF0299FF);
-  late Color alternate = const Color(0xFFE3E7ED);
-  late Color primaryText = const Color(0xFF14181B);
-  late Color secondaryText = const Color(0xFF677681);
-  late Color primaryBackground = const Color(0xFFF1F4F8);
-  late Color secondaryBackground = const Color(0xFFFFFFFF);
-  late Color accent1 = const Color(0x4CF83B46);
-  late Color accent2 = const Color(0x4CFF6A73);
-  late Color accent3 = const Color(0x4D0299FF);
-  late Color accent4 = const Color(0xB2FFFFFF);
-  late Color success = const Color(0xFF6BBD78);
-  late Color warning = const Color(0xFFEC9C4B);
-  late Color error = const Color(0xFFF83B46);
-  late Color info = const Color(0xFFFFFFFF);
+  late Color primary = const Color(0xFF767676);
+  late Color secondary = const Color(0xFFE5E5E5);
+  late Color tertiary = const Color(0xFFCCCCCC);
+  late Color alternate = const Color(0xFFF2F2F2);
+  late Color primaryText = const Color(0xFFFFFFFF);
+  late Color secondaryText = const Color(0xFF333333);
+  late Color primaryBackground = const Color(0xFFFFFFFF);
+  late Color secondaryBackground = const Color(0xFFF2F2F2);
+  late Color accent1 = const Color(0xFFFF4081);
+  late Color accent2 = const Color(0xFF536DFE);
+  late Color accent3 = const Color(0xFF64B5F6);
+  late Color accent4 = const Color(0xFFFFD740);
+  late Color success = const Color(0xFF4CAF50);
+  late Color warning = const Color(0xFFFFC107);
+  late Color error = const Color(0xFFF44336);
+  late Color info = const Color(0xFF2196F3);
 }
 
 abstract class Typography {
@@ -181,51 +181,51 @@ class ThemeTypography extends Typography {
 
   final FlutterFlowTheme theme;
 
-  String get displayLargeFamily => 'Sora';
+  String get displayLargeFamily => 'Headland One';
   TextStyle get displayLarge => GoogleFonts.getFont(
-        'Sora',
+        'Headland One',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 56.0,
       );
-  String get displayMediumFamily => 'Sora';
+  String get displayMediumFamily => 'Headland One';
   TextStyle get displayMedium => GoogleFonts.getFont(
-        'Sora',
+        'Headland One',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 44.0,
       );
-  String get displaySmallFamily => 'Sora';
+  String get displaySmallFamily => 'Headland One';
   TextStyle get displaySmall => GoogleFonts.getFont(
-        'Sora',
+        'Headland One',
         color: theme.primaryText,
         fontWeight: FontWeight.w500,
         fontSize: 36.0,
       );
-  String get headlineLargeFamily => 'Sora';
+  String get headlineLargeFamily => 'Headland One';
   TextStyle get headlineLarge => GoogleFonts.getFont(
-        'Sora',
+        'Headland One',
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 32.0,
       );
-  String get headlineMediumFamily => 'Sora';
+  String get headlineMediumFamily => 'Headland One';
   TextStyle get headlineMedium => GoogleFonts.getFont(
-        'Sora',
+        'Headland One',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 32.0,
       );
-  String get headlineSmallFamily => 'Sora';
+  String get headlineSmallFamily => 'Headland One';
   TextStyle get headlineSmall => GoogleFonts.getFont(
-        'Sora',
+        'Headland One',
         color: theme.primaryText,
         fontWeight: FontWeight.w500,
         fontSize: 24.0,
       );
-  String get titleLargeFamily => 'Sora';
+  String get titleLargeFamily => 'Headland One';
   TextStyle get titleLarge => GoogleFonts.getFont(
-        'Sora',
+        'Headland One',
         color: theme.primaryText,
         fontWeight: FontWeight.w500,
         fontSize: 22.0,
@@ -295,22 +295,22 @@ class DarkModeTheme extends FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
-  late Color primary = const Color(0xFF080202);
-  late Color secondary = const Color(0xFFFF6A73);
-  late Color tertiary = const Color(0xFF0299FF);
-  late Color alternate = const Color(0xFF262D34);
+  late Color primary = const Color(0xFF000000);
+  late Color secondary = const Color(0xFF1A1A1A);
+  late Color tertiary = const Color(0xFF333333);
+  late Color alternate = const Color(0xFF0D0D0D);
   late Color primaryText = const Color(0xFFFFFFFF);
-  late Color secondaryText = const Color(0xFFA5B0BE);
-  late Color primaryBackground = const Color(0xFF1A1F24);
-  late Color secondaryBackground = const Color(0xFF0F1316);
-  late Color accent1 = const Color(0x4CF83B46);
-  late Color accent2 = const Color(0x4CFF6A73);
-  late Color accent3 = const Color(0x4D0299FF);
-  late Color accent4 = const Color(0xB20B191E);
-  late Color success = const Color(0xFF6BBD78);
-  late Color warning = const Color(0xFFEC9C4B);
-  late Color error = const Color(0xFFF83B46);
-  late Color info = const Color(0xFFFFFFFF);
+  late Color secondaryText = const Color(0xFFCCCCCC);
+  late Color primaryBackground = const Color(0xFF000000);
+  late Color secondaryBackground = const Color(0xFF0D0D0D);
+  late Color accent1 = const Color(0xFFD50050);
+  late Color accent2 = const Color(0xFF304FFE);
+  late Color accent3 = const Color(0xFF0091EA);
+  late Color accent4 = const Color(0xFFFFAB00);
+  late Color success = const Color(0xFF2E7D32);
+  late Color warning = const Color(0xFFFFA000);
+  late Color error = const Color(0xFFD32F2F);
+  late Color info = const Color(0xFF1976D2);
 }
 
 extension TextStyleHelper on TextStyle {

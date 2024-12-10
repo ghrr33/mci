@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '/backend/backend.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
+import '/backend/push_notifications/push_notifications_handler.dart'
+    show PushNotificationsHandler;
 import '/index.dart';
 import '/main.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 export 'package:go_router/go_router.dart';
@@ -73,68 +75,224 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? const NavBarPage() : const LoginSignupWidget(),
+          appStateNotifier.loggedIn ? const NavBarPage() : const Auth3LoginWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? const NavBarPage() : const LoginSignupWidget(),
+              appStateNotifier.loggedIn ? const NavBarPage() : const Auth3LoginWidget(),
         ),
         FFRoute(
-          name: 'Login_Signup',
-          path: '/loginSignup',
-          builder: (context, params) => const LoginSignupWidget(),
-        ),
-        FFRoute(
-          name: 'profile',
-          path: '/profile',
+          name: 'ProfileUser',
+          path: '/profileUser',
           builder: (context, params) => params.isEmpty
-              ? const NavBarPage(initialPage: 'profile')
-              : const ProfileWidget(),
+              ? const NavBarPage(initialPage: 'ProfileUser')
+              : const ProfileUserWidget(),
         ),
         FFRoute(
-          name: 'editprofile',
-          path: '/editprofile',
-          builder: (context, params) => const EditprofileWidget(),
+          name: 'ProfileUserEdit',
+          path: '/profileUserEdit',
+          builder: (context, params) => const ProfileUserEditWidget(),
         ),
         FFRoute(
-          name: 'homePage',
-          path: '/homePage',
+          name: 'Home',
+          path: '/home',
+          builder: (context, params) =>
+              params.isEmpty ? const NavBarPage(initialPage: 'Home') : const HomeWidget(),
+        ),
+        FFRoute(
+          name: 'EventsCerca',
+          path: '/eventsCerca',
           builder: (context, params) => params.isEmpty
-              ? const NavBarPage(initialPage: 'homePage')
-              : const HomePageWidget(),
-        ),
-        FFRoute(
-          name: 'Administrator',
-          path: '/administrator',
-          builder: (context, params) => const AdministratorWidget(),
-        ),
-        FFRoute(
-          name: 'Events',
-          path: '/events',
-          builder: (context, params) => params.isEmpty
-              ? const NavBarPage(initialPage: 'Events')
-              : const EventsWidget(),
-        ),
-        FFRoute(
-          name: 'CreaMessa',
-          path: '/creaMessa',
-          builder: (context, params) => const CreaMessaWidget(),
-        ),
-        FFRoute(
-          name: 'CreaEvento',
-          path: '/creaEvento',
-          builder: (context, params) => const CreaEventoWidget(),
+              ? const NavBarPage(initialPage: 'EventsCerca')
+              : const EventsCercaWidget(),
         ),
         FFRoute(
           name: 'SanteMesse',
           path: '/santeMesse',
+          asyncParams: {
+            'receive': getDoc(['SantaMessa'], SantaMessaRecord.fromSnapshot),
+          },
+          builder: (context, params) => SanteMesseWidget(
+            receive: params.getParam(
+              'receive',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'SuDiNoi',
+          path: '/suDiNoi',
+          builder: (context, params) => SuDiNoiWidget(
+            testoisoff: params.getParam(
+              'testoisoff',
+              ParamType.bool,
+            ),
+            testoison: params.getParam(
+              'testoison',
+              ParamType.bool,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'chat_2_Details',
+          path: '/chat2Details',
+          asyncParams: {
+            'chatRef': getDoc(['chats'], ChatsRecord.fromSnapshot),
+          },
+          builder: (context, params) => Chat2DetailsWidget(
+            chatRef: params.getParam(
+              'chatRef',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'chat_2_main',
+          path: '/chat2Main',
           builder: (context, params) => params.isEmpty
-              ? const NavBarPage(initialPage: 'SanteMesse')
-              : const SanteMesseWidget(),
+              ? const NavBarPage(initialPage: 'chat_2_main')
+              : const Chat2MainWidget(),
+        ),
+        FFRoute(
+          name: 'chat_2_InviteUsers',
+          path: '/chat2InviteUsers',
+          asyncParams: {
+            'chatRef': getDoc(['chats'], ChatsRecord.fromSnapshot),
+          },
+          builder: (context, params) => Chat2InviteUsersWidget(
+            chatRef: params.getParam(
+              'chatRef',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'image_Details',
+          path: '/imageDetails',
+          asyncParams: {
+            'chatMessage':
+                getDoc(['chat_messages'], ChatMessagesRecord.fromSnapshot),
+          },
+          builder: (context, params) => ImageDetailsWidget(
+            chatMessage: params.getParam(
+              'chatMessage',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'auth_3_Create',
+          path: '/auth3Create',
+          builder: (context, params) => const Auth3CreateWidget(),
+        ),
+        FFRoute(
+          name: 'auth_3_Login',
+          path: '/auth3Login',
+          builder: (context, params) => const Auth3LoginWidget(),
+        ),
+        FFRoute(
+          name: 'auth_3_phone',
+          path: '/auth3Phone',
+          builder: (context, params) => const Auth3PhoneWidget(),
+        ),
+        FFRoute(
+          name: 'auth_3_verifyPhone',
+          path: '/auth3VerifyPhone',
+          builder: (context, params) => Auth3VerifyPhoneWidget(
+            phoneNumber: params.getParam(
+              'phoneNumber',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'auth_3_ForgotPassword',
+          path: '/auth3ForgotPassword',
+          builder: (context, params) => const Auth3ForgotPasswordWidget(),
+        ),
+        FFRoute(
+          name: 'SanteMesseCerca',
+          path: '/santeMesseCerca',
+          builder: (context, params) => const SanteMesseCercaWidget(),
+        ),
+        FFRoute(
+          name: 'EventiHome',
+          path: '/EventiHome',
+          asyncParams: {
+            'refeventi': getDoc(['Eventi'], EventiRecord.fromSnapshot),
+          },
+          builder: (context, params) => EventiHomeWidget(
+            refeventi: params.getParam(
+              'refeventi',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'Gruppi',
+          path: '/gruppi',
+          builder: (context, params) => const GruppiWidget(),
+        ),
+        FFRoute(
+          name: 'Appuntamenti',
+          path: '/appuntamenti',
+          builder: (context, params) => params.isEmpty
+              ? const NavBarPage(initialPage: 'Appuntamenti')
+              : const AppuntamentiWidget(),
+        ),
+        FFRoute(
+          name: 'GruppoHome',
+          path: '/gruppoHome',
+          asyncParams: {
+            'ref': getDoc(['GruppiMCI'], GruppiMCIRecord.fromSnapshot),
+          },
+          builder: (context, params) => GruppoHomeWidget(
+            ref: params.getParam(
+              'ref',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'donazioni',
+          path: '/donazioni',
+          builder: (context, params) => const DonazioniWidget(),
+        ),
+        FFRoute(
+          name: 'AggiungiPhoto',
+          path: '/aggiungiPhoto',
+          asyncParams: {
+            'refalbum': getDoc(['Album'], AlbumRecord.fromSnapshot),
+          },
+          builder: (context, params) => AggiungiPhotoWidget(
+            refalbum: params.getParam(
+              'refalbum',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'Galleria',
+          path: '/galleria',
+          builder: (context, params) => const GalleriaWidget(),
+        ),
+        FFRoute(
+          name: 'ShowFoto',
+          path: '/showFoto',
+          asyncParams: {
+            'ref': getDoc(['Album'], AlbumRecord.fromSnapshot),
+          },
+          builder: (context, params) => ShowFotoWidget(
+            ref: params.getParam(
+              'ref',
+              ParamType.Document,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
+      observers: [routeObserver],
     );
 
 extension NavParamExtensions on Map<String, String?> {
@@ -303,7 +461,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/loginSignup';
+            return '/auth3Login';
           }
           return null;
         },
@@ -317,18 +475,18 @@ class FFRoute {
                 )
               : builder(context, ffParams);
           final child = appStateNotifier.loading
-              ? Center(
-                  child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        FlutterFlowTheme.of(context).primary,
-                      ),
+              ? Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/Minimalist_Black_Church_Icon_on_White_Background_Icons-removebg-preview.png',
+                      width: 200.0,
+                      height: 200.0,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 )
-              : page;
+              : PushNotificationsHandler(child: page);
 
           final transitionInfo = state.transitionInfo;
           return transitionInfo.hasTransition

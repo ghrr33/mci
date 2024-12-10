@@ -15,49 +15,49 @@ class SantaMessaRecord extends FirestoreRecord {
     _initializeFields();
   }
 
-  // "Photo" field.
-  String? _photo;
-  String get photo => _photo ?? '';
-  bool hasPhoto() => _photo != null;
-
-  // "Luogo" field.
-  String? _luogo;
-  String get luogo => _luogo ?? '';
-  bool hasLuogo() => _luogo != null;
-
-  // "start_time" field.
-  DateTime? _startTime;
-  DateTime? get startTime => _startTime;
-  bool hasStartTime() => _startTime != null;
-
-  // "Chiesa" field.
+  // "chiesa" field.
   String? _chiesa;
   String get chiesa => _chiesa ?? '';
   bool hasChiesa() => _chiesa != null;
 
-  // "Favorite" field.
-  bool? _favorite;
-  bool get favorite => _favorite ?? false;
-  bool hasFavorite() => _favorite != null;
+  // "startTime" field.
+  DateTime? _startTime;
+  DateTime? get startTime => _startTime;
+  bool hasStartTime() => _startTime != null;
 
-  // "contlikes" field.
-  int? _contlikes;
-  int get contlikes => _contlikes ?? 0;
-  bool hasContlikes() => _contlikes != null;
+  // "luogo" field.
+  String? _luogo;
+  String get luogo => _luogo ?? '';
+  bool hasLuogo() => _luogo != null;
 
-  // "short_description" field.
-  String? _shortDescription;
-  String get shortDescription => _shortDescription ?? '';
-  bool hasShortDescription() => _shortDescription != null;
+  // "Image" field.
+  String? _image;
+  String get image => _image ?? '';
+  bool hasImage() => _image != null;
+
+  // "description" field.
+  String? _description;
+  String get description => _description ?? '';
+  bool hasDescription() => _description != null;
+
+  // "cratedDate" field.
+  DateTime? _cratedDate;
+  DateTime? get cratedDate => _cratedDate;
+  bool hasCratedDate() => _cratedDate != null;
+
+  // "evento" field.
+  String? _evento;
+  String get evento => _evento ?? '';
+  bool hasEvento() => _evento != null;
 
   void _initializeFields() {
-    _photo = snapshotData['Photo'] as String?;
-    _luogo = snapshotData['Luogo'] as String?;
-    _startTime = snapshotData['start_time'] as DateTime?;
-    _chiesa = snapshotData['Chiesa'] as String?;
-    _favorite = snapshotData['Favorite'] as bool?;
-    _contlikes = castToType<int>(snapshotData['contlikes']);
-    _shortDescription = snapshotData['short_description'] as String?;
+    _chiesa = snapshotData['chiesa'] as String?;
+    _startTime = snapshotData['startTime'] as DateTime?;
+    _luogo = snapshotData['luogo'] as String?;
+    _image = snapshotData['Image'] as String?;
+    _description = snapshotData['description'] as String?;
+    _cratedDate = snapshotData['cratedDate'] as DateTime?;
+    _evento = snapshotData['evento'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -95,23 +95,23 @@ class SantaMessaRecord extends FirestoreRecord {
 }
 
 Map<String, dynamic> createSantaMessaRecordData({
-  String? photo,
-  String? luogo,
-  DateTime? startTime,
   String? chiesa,
-  bool? favorite,
-  int? contlikes,
-  String? shortDescription,
+  DateTime? startTime,
+  String? luogo,
+  String? image,
+  String? description,
+  DateTime? cratedDate,
+  String? evento,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
-      'Photo': photo,
-      'Luogo': luogo,
-      'start_time': startTime,
-      'Chiesa': chiesa,
-      'Favorite': favorite,
-      'contlikes': contlikes,
-      'short_description': shortDescription,
+      'chiesa': chiesa,
+      'startTime': startTime,
+      'luogo': luogo,
+      'Image': image,
+      'description': description,
+      'cratedDate': cratedDate,
+      'evento': evento,
     }.withoutNulls,
   );
 
@@ -123,24 +123,24 @@ class SantaMessaRecordDocumentEquality implements Equality<SantaMessaRecord> {
 
   @override
   bool equals(SantaMessaRecord? e1, SantaMessaRecord? e2) {
-    return e1?.photo == e2?.photo &&
-        e1?.luogo == e2?.luogo &&
+    return e1?.chiesa == e2?.chiesa &&
         e1?.startTime == e2?.startTime &&
-        e1?.chiesa == e2?.chiesa &&
-        e1?.favorite == e2?.favorite &&
-        e1?.contlikes == e2?.contlikes &&
-        e1?.shortDescription == e2?.shortDescription;
+        e1?.luogo == e2?.luogo &&
+        e1?.image == e2?.image &&
+        e1?.description == e2?.description &&
+        e1?.cratedDate == e2?.cratedDate &&
+        e1?.evento == e2?.evento;
   }
 
   @override
   int hash(SantaMessaRecord? e) => const ListEquality().hash([
-        e?.photo,
-        e?.luogo,
-        e?.startTime,
         e?.chiesa,
-        e?.favorite,
-        e?.contlikes,
-        e?.shortDescription
+        e?.startTime,
+        e?.luogo,
+        e?.image,
+        e?.description,
+        e?.cratedDate,
+        e?.evento
       ]);
 
   @override
